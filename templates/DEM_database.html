@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} DEM {% endblock %}
+{% block content %}
+
+<!-- DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>  
+
+
+
+<!--BootStrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<!-- CSS -->
+<!-- <link rel="stylesheet" href="{% static 'css/hw4.css' %}">  -->
+
+<!-- js -->
+<script src="{% static 'js/DEM_database.js' %}"></script>
+
+
+<!-- html code  -->
+<div id='search_table'  style="width: 90%;  margin: 0 auto;"  >
+    <div class="card " > 
+        <div class="card-header">
+        <h4 style="text-align:left"><b><i class="fas fa-user-cog"></i>  Search </b></h4> 
+        </div>  
+        <div class="card-body">
+            <table id="target_table" class="card-body dataTable no-footer">
+                <thead> 
+                    <tr>
+                        <!-- <th><input type="checkbox" id="select_all" onclick="toggleAll(this)"> Select all<br></th> -->
+                    </tr>
+                </thead> 
+                <tbody>
+                    <tr> 
+                        <td>
+                            &nbsp; &nbsp;&nbsp;<input type="checkbox" class="stage-checkbox" id="stage0" name="foo"> 
+                            <label for="Healthy"> &nbsp;:&nbsp; Healthy (n=115)</label><br>
+                            &nbsp; &nbsp;&nbsp;<input type="checkbox" class="stage-checkbox" id="stage1" name="foo"> 
+                            <label for="stage1"> &nbsp;:&nbsp; Stage1 (n=28) </label><br>
+                            &nbsp; &nbsp;&nbsp;<input type="checkbox" class="stage-checkbox" id="stage2" name="foo"> 
+                            <label for="stage2"> &nbsp;:&nbsp; Stage2 (n=47)</label><br>
+                            &nbsp; &nbsp;&nbsp;<input type="checkbox" class="stage-checkbox" id="stage3" name="foo"> 
+                            <label for="stage3"> &nbsp;:&nbsp; Stage3 (n=60)</label><br>
+                            &nbsp; &nbsp;&nbsp;<input type="checkbox" class="stage-checkbox" id="stage4" name="foo"> 
+                            <label for="stage4"> &nbsp;:&nbsp; Stage4 (n=37)</label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <button class="btn btn-outline-primary" style="width: 15%; margin: 0 auto;" id="search_submit">Submit</button><br>
+    </div>
+</div>
+<br>
+
+<div id='result_table'  style="width: 90%;  margin: 0 auto;"  >
+    <div class="card " > 
+        <div class="card-header">
+        <h4 style="text-align:left"><b><i class="fas fa-user-cog"></i>  Result </b></h4> 
+        </div>  
+        <div id="ans_table" class="card-body">
+            
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

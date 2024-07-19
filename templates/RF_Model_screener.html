@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Feature Selection (Batch1 + Batch2 + Batch3) {% endblock %}
+{% block content %}
+<!-- DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>  
+<!--BootStrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<!-- css -->
+<link rel="stylesheet" href="{% static 'css/RF_Model.css' %}">    
+<!-- js -->
+<script src="{% static 'js/RF_Model_screener.js' %}"></script>
+
+<!-- html -->
+
+<div id="id_content"  style="width: 90%;  margin: 0 auto;">
+    <div class="card " > 
+        <div class="card-header">
+        <h4 style="text-align:left"><b><i class="fas fa-user-cog"></i>  Search </b></h4> 
+        </div>  
+        <div class="card-body">
+            <!-- <div class="split-container">
+                <label class="switch">
+                    <input type="checkbox" id="toggle-B12" onclick="toggleCheckbox('toggle-B12')">
+                    <span class="slider"></span>
+                </label>
+                <p>使用資料:(原始資料) <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Batch1 + Batch2  總共:146位病人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - CRC:86人 &nbsp; - Healthy:60人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * A(一期大腸癌):11人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * B(二期大腸癌):27人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * C(三期大腸癌):30人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * D(四期大腸癌):18人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * N(健康病人):60人 <br>        
+                </p>
+                <label class="switch">
+                    <input type="checkbox" id="toggle-B123" onclick="toggleCheckbox('toggle-B123')">
+                    <span class="slider"></span>
+                </label>
+                <p>使用資料:(去除Batch Effect資料) <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Batch1 + Batch2 + Batch3 總共:219位病人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - CRC:129人 &nbsp; - Healthy:90人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * A(一期大腸癌):26人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * B(二期大腸癌):41人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * C(三期大腸癌):45人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * D(四期大腸癌):27人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * N(健康病人):90人 <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - 去除Batch Effect方法: 每個病人個別進行標準化 <br>
+                </p>
+            </div> -->
+            
+            <p>使用資料: <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Batch1 + Batch2 + Batch3 總共:219位病人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - CRC:129人 &nbsp; - Healthy:90人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * A(一期大腸癌):26人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * B(二期大腸癌):41人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * C(三期大腸癌):45人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * D(四期大腸癌):27人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * N(健康病人):90人 <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - 去除Batch Effect方法: 每個病人個別進行標準化 <br>
+            <div class="black-line"></div>
+            <p>使用方法：<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.打開開關選擇想要使用的篩選器 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.輸入想要進行篩選數值且選擇大於或小於 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.每個按鈕都開表示篩選這些條件的交集 <br> 
+            <div style="text-align: center;">
+                <div>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-total">
+                        <span class="slider"></span>
+                    </label>&nbsp;&nbsp;&nbsp;
+                    <label for="total-count">Total Count  &nbsp;</label>
+                    <select id="total_count_condition" name="total_count_condition">
+                        <option value="greater"> > </option>
+                        <option value="less"> < </option>
+                    </select>&nbsp;
+                    <input type="text" id="total_count" name="total-count"><br><br>
+                </div>
+        
+                <div>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-importance">
+                        <span class="slider"></span>
+                    </label>&nbsp;&nbsp;&nbsp;
+                    <label for="mean-importance">Mean Importance  &nbsp;</label>
+                    <select id="mean_importance_condition" name="mean_importance_condition">
+                        <option value="greater"> > </option>
+                        <option value="less"> < </option>
+                    </select>&nbsp;
+                    <input type="text" id="mean_importance" name="mean-importance"><br><br>
+                </div>
+        
+                <div>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-auc">
+                        <span class="slider"></span>
+                    </label>&nbsp;&nbsp;&nbsp;
+                    <label for="auc-value">AUC Value  &nbsp;</label>
+                    <select id="auc_value_condition" name="auc_value_condition">
+                        <option value="greater"> > </option>
+                        <option value="less"> < </option>
+                    </select>&nbsp;
+                    <input type="text" id="auc_value" name="auc-value"><br><br>
+                </div>
+
+                <!-- <div>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-pvalue">
+                        <span class="slider"></span>
+                    </label>&nbsp;&nbsp;&nbsp;
+                    <label for="pvalue-value">P Value  &nbsp;</label>
+                    <select id="pvalue_value_condition" name="pvalue_value_condition">
+                        <option value="greater"> > </option>
+                        <option value="less"> < </option>
+                    </select>&nbsp;
+                    <input type="text" id="pvalue_value" name="pvalue-value"><br><br>
+                </div> -->
+            </div>
+            <div class="center">
+                <button type="button" value="search" id="RF_submit" class="btn btn-primary" style="text-align: center;"> Search </button>
+            </div>
+            
+        </div>
+    </div>
+    
+</div><br><br>
+<!-- Heatmap model -->
+<div class="modal" id="Heatmap">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Heatmap</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div width=80% align="center">
+                
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- model -->
+
+<!-- result -->
+<div id='RF_result_block'  style="width: 90%;  margin: 0 auto;"  >
+    <div class="card " > 
+        <div class="card-header">
+        <h4 style="text-align:left"><b><i class="fas fa-user-cog"></i>  Result </b></h4> 
+        </div>  
+        <div id="ans_table" class="card-body">
+            <table id="RF_result_Table" class="display" style="width:100%"></table>
+        </div>
+    </div>
+</div>    
+
+<!-- <script>
+    function toggleCheckbox(id) {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.id !== id) {
+                checkbox.checked = false;
+            }
+        });
+    }
+    </script> -->
+{% endblock %}

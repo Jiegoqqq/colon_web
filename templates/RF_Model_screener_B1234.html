@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Feature Selection (Batch1 + Batch2) {% endblock %}
+{% block content %}
+<!-- DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>  
+<!--BootStrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<!-- css -->
+<link rel="stylesheet" href="{% static 'css/RF_Model.css' %}">    
+<!-- js -->
+<script src="{% static 'js/RF_Model_screener_B1234.js' %}"></script>
+
+<!-- html -->
+
+<div id="id_content"  style="width: 90%;  margin: 0 auto;">
+    <div class="card " > 
+        <div class="card-header">
+        <h4 style="text-align:left"><b><i class="fas fa-user-cog"></i>  Search </b></h4> 
+        </div>  
+        <div class="card-body">            
+            <p>使用資料:(原始資料) <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Batch1 ~ Batch4  總共:287位病人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - CRC:172人 &nbsp; - Healthy:115人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * A(一期大腸癌):28人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * B(二期大腸癌):47人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * C(三期大腸癌):60人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * D(四期大腸癌):37人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * N(健康病人):115人 <br>        
+            </p>
+            <div class="black-line"></div>
+            <p>使用方法：<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.打開開關選擇想要使用的篩選器 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.輸入想要進行篩選數值且選擇大於或小於 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.每個按鈕都開表示篩選這些條件的交集 <br> 
+            <!-- <div style="display: flex;"> -->
+                <div>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-total">
+                        <span class="slider"></span>
+                    </label>&nbsp;&nbsp;&nbsp;
+                    <label for="total-count">Total Count  &nbsp;</label>
+                    <select id="total_count_condition" name="total_count_condition">
+                        <option value="greater"> > </option>
+                        <option value="less"> < </option>
+                    </select>&nbsp;
+                    <input type="text" id="total_count" name="total-count"><br><br>
+                </div>
+        
+                <div>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-importance">
+                        <span class="slider"></span>
+                    </label>&nbsp;&nbsp;&nbsp;
+                    <label for="mean-importance">Mean Importance  &nbsp;</label>
+                    <select id="mean_importance_condition" name="mean_importance_condition">
+                        <option value="greater"> > </option>
+                        <option value="less"> < </option>
+                    </select>&nbsp;
+                    <input type="text" id="mean_importance" name="mean-importance"><br><br>
+                </div>
+        
+                <div>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-auc">
+                        <span class="slider"></span>
+                    </label>&nbsp;&nbsp;&nbsp;
+                    <label for="auc-value">AUC Value  &nbsp;</label>
+                    <select id="auc_value_condition" name="auc_value_condition">
+                        <option value="greater"> > </option>
+                        <option value="less"> < </option>
+                    </select>&nbsp;
+                    <input type="text" id="auc_value" name="auc-value"><br><br>
+                </div>
+
+                <!-- <div>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-pvalue">
+                        <span class="slider"></span>
+                    </label>&nbsp;&nbsp;&nbsp;
+                    <label for="pvalue-value">P Value  &nbsp;</label>
+                    <select id="pvalue_value_condition" name="pvalue_value_condition">
+                        <option value="greater"> > </option>
+                        <option value="less"> < </option>
+                    </select>&nbsp;
+                    <input type="text" id="pvalue_value" name="pvalue-value"><br><br>
+                </div> -->
+            <!-- </div> -->
+            <div class="black-line"></div>
+            <!-- <div style="text-align: center;"> -->
+                <div class="FormOption">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Define differential expression : </label>
+                        
+                        <div class="col-sm-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th style="background-color: #6B8E23;color:#FFFFFF;border-color: #6B8E23;text-align:center;border-top-left-radius:4px;border-top-right-radius:4px;font-size: 14px;">
+                                            Fold Change of Average Strength
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:0;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" style="border-right:0;border-top-left-radius:0; padding-top: 10px;">
+                                                    <!-- <input type="checkbox" id="foldchange_checkbox" > -->
+                                                    <label class="switch">
+                                                        <input type="checkbox" id="foldchange_checkbox">
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </span>
+                                                <span class="input-group-addon" style="border-right:0;width:40%; text-align: center; padding-top: 10px;">
+                                                    CRC Patient / Healthy Patient
+                                                </span>
+                                                <span class="input-group-addon" style="border-right:0;width:12%; padding-top: 10px;">
+                                                    <select id="FC_select" style="height: 25px;width:100%;" name="filter_element">
+                                                        <option value="greater">≥</option>
+                                                        <option value="less">≤</option>
+                                                        <!--<option>Either (Condition2 vs Condition1)</option>-->
+                                                    </select>
+                                                </span>
+                                                <input type="text" class="form-control" id="log2FC_input" name="filter_element" value="2" style="z-index:0;border-top-right-radius:0;">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
+    
+                        <label class="col-sm-4 control-label"></label>
+                        
+                        
+                        <div class="col-sm-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th style="background-color: #6B8E23;color:#FFFFFF;border-color: #6B8E23;text-align:center;border-top-left-radius:4px;border-top-right-radius:4px;font-size: 14px;">
+                                            Statistical Significance
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:0;">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" style="border-right:0;border-top-left-radius:0; padding-top: 30px;">
+                                                    <!-- &nbsp;<input type="checkbox" id="test_checkbox" > -->
+                                                    <label class="switch">
+                                                        <input type="checkbox" id="test_checkbox">
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </span>&nbsp;
+                                                <!--<span class="input-group-addon" style="border-right:0">qvalue</span>-->
+                                                <span class="input-group-addon" style="border-right:0;width:25%">
+                                                    <span style="font-weight: bold">Test</span>
+                                                    <hr style="width: 100%; color: black; height: 2px; background-color:#8B0000;">
+                                                    <select id="TEST_select" style="height: 25px;width:100%" name="filter_element" onchange="select_function()">
+                                                        <option value="KS_test">KS test</option>
+                                                        <option value="T_test" selected="">T test</option>
+                                                        <option value="U_test">U test</option>
+                                                        <!-- <option>Cuffdiff DE test</option> -->
+                                                    </select>
+                                                </span>
+                                                <span class="input-group-addon" style="width:25%">
+                                                    <span style="font-weight: bold">Direction</span>
+                                                    <hr style="width: 100%; color: black; height: 2px; background-color:#8B0000;">
+                                                    <select id="TESTstates_select" style="height: 25px;width:100%;" name="filter_element">
+                                                        <option value="greater">Greater (CRC Patient &gt; Healthy Patient)</option>
+                                                        <option value="less">Less (CRC Patient &lt; Healthy Patient)</option>
+                                                        <!-- <option style="display: none">Two sided (Condition 2 != Condition 1)</option> -->
+                                                    </select>                                                                                                                                                                                        
+                                                </span>
+                                                <span class="input-group-addon" style="width:25%">
+                                                    <span style="font-weight: bold">Correction</span>
+                                                    <hr style="width: 100%; color: black; height: 2px; background-color:#8B0000;">
+                                                    <select id="TESTstates_modify" style="height: 25px;width:100%;" name="filter_element">
+                                                        <option value="None">None</option>
+                                                        <option value="fdr_bh">FDR</option>
+                                                        <option value="bonferroni">Bonferroni</option>
+                                                    </select>
+                                                </span>
+                                                <span class="input-group-addon" style="width:20%">
+                                                    <span style="font-weight: bold">q-value cutoff</span>
+                                                        <hr style="width: 100%; color: black; height: 2px; background-color:#8B0000;">
+                                                    <input type="text" class="form-control" id="qvalue_input" name="filter_element" value="0.01" style="border-top-right-radius:0;z-index:0;height:25px;">
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table><br>
+                        </div>
+                    </div>
+                </div>
+            <!-- </div> -->
+            
+            <div class="center">
+                <button type="button" value="search" id="RF_submit" class="btn btn-primary" style="text-align: center;"> Search </button>
+            </div>
+            
+        </div>
+    </div>
+    
+</div><br><br>
+
+
+<!-- result -->
+<div id='RF_result_block'  style="width: 90%;  margin: 0 auto;"  >
+    <div class="card " > 
+        <div class="card-header">
+        <h4 style="text-align:left"><b><i class="fas fa-user-cog"></i>  Result </b></h4> 
+        </div>  
+        <div id="ans_table" class="card-body">
+            <!-- <table id="RF_result_Table" class="display" style="width:100%"></table> -->
+        </div>
+    </div>
+</div>    
+
+{% endblock %}

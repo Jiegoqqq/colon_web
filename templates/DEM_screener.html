@@ -1,0 +1,409 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} DEM Screener {% endblock %}
+{% block content %} 
+<!-- DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>  
+<!--BootStrap-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<!-- css -->
+<link rel="stylesheet" href="{% static 'css/mystyle.css' %}">    
+<!-- js -->
+<script src="{% static 'js/DEM_screener.js' %}"></script>
+
+<!-- html -->
+<div id="id_content" >
+    <div id="middle">
+        <div width="100%" align="center">
+            <div class="card-header"  >
+                <h4 style="text-align:left"><b><i class="fas fa-user-cog"></i>  Search </b></h4> 
+                </div> 
+            <form class="form-horizontal SearchForm" style="border-top-left-radius:0;">
+                <br>
+                <div>
+                    <div class="FormOption" style="background-color: #265a88;">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <span style="font-weight: bold;color: #FFFFFF;">                <p>使用資料:(原始資料) <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Batch1 ~ Batch4  總共:287位病人&nbsp; | &nbsp;&nbsp;&nbsp;- CRC:172人 &nbsp; - Healthy:115人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * A(一期大腸癌):28人  &nbsp; | &nbsp;&nbsp;&nbsp; * B(二期大腸癌):47人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * C(三期大腸癌):60人  &nbsp; | &nbsp;&nbsp;&nbsp; * D(四期大腸癌):37人 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * N(健康病人):115人 <br>        
+                                </p></span>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- <div class="FormOption">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Select a cancer : </label><br>
+                            <div class="col-sm-7">
+                                <div id="primary_site_div">
+                                    <select class="form-control select2-hidden-accessible" id="primary_select" style="width: 100%" name="select_element" tabindex="-1" aria-hidden="true">
+                                        <option>Select a Cancer</option>               
+                                        <option value="CRC" selected="">Colorectal cancer</option>
+                                    </select>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div><br> -->
+
+                    <!-- <div class="FormOption">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Select two stages : </label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="col-sm-3">
+                                        <b>Condition 1</b>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="col-sm-3">
+                                        <b>Condition 2</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-sm-4">
+                                    <div id="c2_div">
+                                        <select id="condition1" style="width: 100%" name="select_element" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                                            <option> Select Condition 1</option>
+                                            <option value="S" selected="">CRC (n=172)</option>
+                                            <option value="N">Normal (n=115)</option>
+                                            <option value="A">Stage i (n=28)</option>
+                                            <option value="B">Stage ii (n=47)</option>
+                                            <option value="C">Stage iii (n=60)</option>
+                                            <option value="D">Stage iv (n=37)</option>   
+                                            <option value="E">Early Stage(i+ii) (n=75)</option>   
+                                            <option value="L">Later Stage(iii+iv) (n=97)</option>   
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    vs.
+                                </div>
+                                <div class="col-sm-4">
+                                    <div id="c1_div">
+                                        <select id="condition2" style="width: 100%" name="select_element" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                                            <option >Select Condition 2</option>
+                                            <option value="S">CRC (n=172)</option>
+                                            <option value="N" selected="">Normal (n=115)</option>
+                                            <option value="A">Stage i (n=28)</option>
+                                            <option value="B">Stage ii (n=47)</option>
+                                            <option value="C">Stage iii (n=60)</option>
+                                            <option value="D">Stage iv (n=37)</option>
+                                            <option value="E">Early Stage(i+ii) (n=75)</option>   
+                                            <option value="L">Later Stage(iii+iv) (n=97)</option> 
+                                        </select>
+                                    </div>
+                                </div>
+                            </div><br>
+                        </div>
+                    </div><br> -->
+                    <div class="FormOption">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Select a cancer: </label><br>
+                            <div class="col-sm-7">
+                                <div id="primary_site_div">
+                                    <select class="form-control select2-hidden-accessible" id="primary_select" style="width: 100%" name="select_element" tabindex="-1" aria-hidden="true">
+                                        <option value="" disabled selected>Select a Cancer</option>               
+                                        <option value="CRC">Colorectal cancer</option>
+                                        <!-- <option value="Lung">Lung cancer</option>
+                                        <option value="Breast">Breast cancer</option> -->
+                                    </select>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div><br>
+                
+                    <div class="FormOption">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Select two stages: </label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="col-sm-3">
+                                        <b>Condition 1</b>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="col-sm-3">
+                                        <b>Condition 2</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-sm-4">
+                                    <div id="c2_div">
+                                        <select id="condition1" style="width: 100%" name="select_element" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                                            <option value="">Select Condition 1</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    vs.
+                                </div>
+                                <div class="col-sm-4">
+                                    <div id="c1_div">
+                                        <select id="condition2" style="width: 100%" name="select_element" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+                                            <option value="">Select Condition 2</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div><br>
+                        </div>
+                    </div><br>
+                    <div class="FormOption">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Feature Filter : </label>
+                        </div>
+                        <div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-total">
+                                <span class="slider"></span>
+                            </label>&nbsp;&nbsp;&nbsp;
+                            <label for="total-count">Total Count  &nbsp;</label>
+                            <select id="total_count_condition" name="total_count_condition">
+                                <option value="greater"> > </option>
+                                <option value="less"> < </option>
+                            </select>&nbsp;
+                            <input type="text" id="total_count" name="total-count"><br><br>
+                        </div>
+                
+                        <div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-importance">
+                                <span class="slider"></span>
+                            </label>&nbsp;&nbsp;&nbsp;
+                            <label for="mean-importance">Mean Importance  &nbsp;</label>
+                            <select id="mean_importance_condition" name="mean_importance_condition">
+                                <option value="greater"> > </option>
+                                <option value="less"> < </option>
+                            </select>&nbsp;
+                            <input type="text" id="mean_importance" name="mean-importance"><br><br>
+                        </div>
+                
+                        <div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-auc">
+                                <span class="slider"></span>
+                            </label>&nbsp;&nbsp;&nbsp;
+                            <label for="auc-value">AUC Value  &nbsp;</label>
+                            <select id="auc_value_condition" name="auc_value_condition">
+                                <option value="greater"> > </option>
+                                <option value="less"> < </option>
+                            </select>&nbsp;
+                            <input type="text" id="auc_value" name="auc-value"><br><br>
+                        </div>
+                    </div><br>
+
+                    <div class="FormOption">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Define differential expression : </label>
+                            
+                            <div class="col-sm-10">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="background-color: #6B8E23;color:#FFFFFF;border-color: #6B8E23;text-align:center;border-top-left-radius:4px;border-top-right-radius:4px;font-size: 14px;">
+                                                Fold Change of Average Strength
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding:0;">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon" style="border-right:0;border-top-left-radius:0; padding-top: 10px;">
+                                                        <label class="switch">
+                                                            <input type="checkbox" id="foldchange_checkbox">
+                                                            <span class="slider"></span>
+                                                        </label>
+                                                    </span>
+                                                    <span class="input-group-addon" style="border-right:0;width:40%; text-align: center; padding-top: 10px;">
+                                                        Condition 1 / Condition 2
+                                                    </span>
+                                                    <span class="input-group-addon" style="border-right:0;width:5%; padding-top: 10px;">
+                                                        <b>≥</b>
+                                                    </span>
+                                                    <!-- <span class="input-group-addon" style="border-right:0;width:12%; padding-top: 10px;">
+                                                        <select id="FC_select" style="height: 25px;width:100%;" name="filter_element">
+                                                            <option value="greater">≥</option>
+                                                            <option value="less">≤</option>
+                                                        </select>
+                                                    </span>&nbsp; -->
+                                                    <input type="text" class="form-control" id="log2FC_input" name="filter_element" value="2" style="margin-top: 10px; height: 25px;text-align: center;">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br>
+
+                            <label class="col-sm-4 control-label"></label>
+                            
+                            
+                            <div class="col-sm-10">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="background-color: #6B8E23;color:#FFFFFF;border-color: #6B8E23;text-align:center;border-top-left-radius:4px;border-top-right-radius:4px;font-size: 14px;">
+                                                Statistical Significance
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding:0;">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon" style="border-right:0;border-top-left-radius:0; padding-top: 30px;">
+                                                        <label class="switch">
+                                                            <input type="checkbox" id="test_checkbox">
+                                                            <span class="slider"></span>
+                                                        </label>
+                                                    </span>&nbsp;
+
+                                                    <span class="input-group-addon" style="border-right:0;width:20%">
+                                                        <span style="font-weight: bold">Test</span>
+                                                        <hr style="width: 100%; color: black; height: 2px; background-color:#8B0000;">
+                                                        <select id="TEST_select" style="height: 20px;width:100%" name="filter_element" onchange="select_function()">
+                                                            <option value="KS_test">KS test</option>
+                                                            <option value="T_test" selected="">T test</option>
+                                                            <option value="U_test">U test</option>
+                                                        </select>
+                                                    </span>
+                                                    <span class="input-group-addon" style="width:27%">
+                                                        <span style="font-weight: bold">Direction</span>
+                                                        <hr style="width: 100%; color: black; height: 2px; background-color:#8B0000;">
+                                                        <!-- <select id="TESTstates_select" style="height: 20px;width:100%;" name="filter_element">
+                                                            <option value="greater">Greater (Condition 1 &gt; Condition 2)</option>
+                                                            <option value="less">Less (Condition 1 &lt; Condition 2)</option>
+                                                            <option style="display: none">Two sided (Condition 2 != Condition 1)</option>
+                                                        </select>   -->
+                                                        <span class="input-group-addon" style="height: 20px; width: 100%; display: flex; justify-content: center; align-items: center;">
+                                                            <b>Greater (Condition 1 &gt; Condition 2)</b>
+                                                        </span>                                                                                                                                                                                 
+                                                    </span>
+                                                    <span class="input-group-addon" style="width:25%">
+                                                        <span style="font-weight: bold">Correction</span>
+                                                        <hr style="width: 100%; color: black; height: 2px; background-color:#8B0000;">
+                                                        <select id="TESTstates_modify" style="height: 20px;width:100%;" name="filter_element">
+                                                            <option value="None">None</option>
+                                                            <option value="fdr_bh">FDR</option>
+                                                            <option value="bonferroni">Bonferroni</option>
+                                                        </select>
+                                                    </span>
+                                                    <span class="input-group-addon" style="width:20%">
+                                                        <span style="font-weight: bold">q-value cutoff</span>
+                                                            <hr style="width: 100%; color: black; height: 2px; background-color:#8B0000;">
+                                                        <input type="text" class="form-control" id="qvalue_input" name="filter_element" value="0.01" style="border-top-right-radius:0;z-index:0;height:20px;">
+                                                    </span><br>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="FormOption">
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                        </div>
+                        <div class="col-sm-7">
+                            <br>
+                            <button type="button" value="search" id="screener_submit" class="btn btn-primary">Search</button>
+                            <br>
+                        </div>
+                    </div>
+                </div><br>
+            </form>
+        </div>
+        <div id="gap">
+        </div>
+        <div id="output">
+        </div>
+    </div>
+</div><br><br>  
+<!-- result -->
+<div id="id_content">
+    <div id='result'  style="width: 90%;  margin: 0 auto;"  >
+        <div class="card " > 
+            <div class="card-header">
+            <h4 style="text-align:left"><b><i class="fas fa-user-cog"></i>  Result </b></h4> 
+            </div>  
+            <div id="ans_table" class="card-body"></div>
+        </div>
+    </div>  
+</div>
+ 
+<!-- 選單的選項 -->
+<script>
+    $(document).ready(function() {
+        function updateConditions(cancerType) {
+            let options = {
+                "": ["Select Condition"],
+                "CRC": [
+                    {value: "S", text: "CRC (n=172)"},
+                    {value: "N", text: "Normal (n=115)"},
+                    {value: "A", text: "Stage i (n=28)"},
+                    {value: "B", text: "Stage ii (n=47)"},
+                    {value: "C", text: "Stage iii (n=60)"},
+                    {value: "D", text: "Stage iv (n=37)"},
+                    {value: "E", text: "Early Stage(i+ii) (n=75)"},
+                    {value: "L", text: "Later Stage(iii+iv) (n=97)"}
+                ],
+                "Lung": [
+                    {value: "S", text: "Lung (n=200)"},
+                    {value: "N", text: "Normal (n=120)"},
+                    {value: "A", text: "Stage i (n=30)"},
+                    {value: "B", text: "Stage ii (n=50)"},
+                    {value: "C", text: "Stage iii (n=70)"},
+                    {value: "D", text: "Stage iv (n=50)"},
+                    {value: "E", text: "Early Stage(i+ii) (n=80)"},
+                    {value: "L", text: "Later Stage(iii+iv) (n=120)"}
+                ],
+                "Breast": [
+                    {value: "S", text: "Breast (n=180)"},
+                    {value: "N", text: "Normal (n=100)"},
+                    {value: "A", text: "Stage i (n=25)"},
+                    {value: "B", text: "Stage ii (n=55)"},
+                    {value: "C", text: "Stage iii (n=65)"},
+                    {value: "D", text: "Stage iv (n=35)"},
+                    {value: "E", text: "Early Stage(i+ii) (n=80)"},
+                    {value: "L", text: "Later Stage(iii+iv) (n=100)"}
+                ]
+            };
+            
+            $('#condition1').empty();
+            $('#condition2').empty();
+            
+            options[cancerType].forEach(option => {
+                $('#condition1').append(new Option(option.text, option.value));
+                $('#condition2').append(new Option(option.text, option.value));
+            });
+        }
+
+        $('#primary_select').change(function() {
+            let selectedCancer = $(this).val();
+            updateConditions(selectedCancer);
+        });
+
+        // Initialize Select2
+        $('#primary_select').select2();
+        $('#condition1').select2();
+        $('#condition2').select2();
+    });
+</script>
+
+
+
+
+{% endblock %}
+
